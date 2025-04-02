@@ -1,6 +1,8 @@
 import 'package:cosmic_weather_app/core/constants/design_constants.dart';
+import 'package:cosmic_weather_app/core/cubit/nasa_data_cubit.dart';
 import 'package:cosmic_weather_app/view/home/presantation/home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
@@ -18,17 +20,27 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder:(context, child) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        
-        title: 'Flutter Demo',
-        theme: ThemeData(
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => GetNasaCubit(),
+          ),
          
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+        ],
+  
+      
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          
+          title: 'Cosmic Weather App',
+          theme: ThemeData(
+           
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const HomeView(),
         ),
-        home: const HomeView(),
-      );}
+        );}
 
 
     );
