@@ -6,9 +6,9 @@ import 'package:cosmic_weather_app/core/components/custom_snackbar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class NasaService<T> extends ChangeNotifier {
-  static const String baseUrl = "https://api.nasa.gov/insight_weather/";
-  static const String apiKey = "shPn19UbNyJgSNHmFkenwnPdrh76PlVYRtweuz1P"; // Burada kendi API key'ini kullanmalısın.
+class WeatherMapService<T> extends ChangeNotifier {
+  static const String baseUrl = "https://api.openweathermap.org/data/2.5";
+  static const String apiKey = "aa3627b2499c8af3469021ee54f923aa"; // Buraya kendi OpenWeatherMap API key'ini kullanmalısın.
 
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
 
@@ -22,9 +22,9 @@ class NasaService<T> extends ChangeNotifier {
     Response? response;
     try {
       queryParameters ??= {};
-      queryParameters["api_key"] = apiKey; // API anahtarını ekliyoruz
-      queryParameters["feedtype"] = "json";
-      queryParameters["ver"] = "1.0";
+      queryParameters["appid"] = apiKey; // API anahtarını ekliyoruz
+      queryParameters["units"] = "metric"; // Sıcaklık birimini Celsius olarak ayarlıyoruz (isteğe bağlı)
+      queryParameters["lang"] = "tr";   // Dil ayarı (isteğe bağlı)
 
       response = await _dio.get(
         url,
@@ -39,6 +39,9 @@ class NasaService<T> extends ChangeNotifier {
         return response.data as T?;
       } else {
         log("${response.statusCode}: ${response.data}", name: "GET ERROR");
+        if (context != null) {
+          showError(context, extractMessage(response.data)); // Hata mesajını doğrudan response.data'dan alıyoruz
+        }
         return null;
       }
     } on DioException catch (error) {
@@ -56,13 +59,23 @@ class NasaService<T> extends ChangeNotifier {
     }
   }
 
-  void showError(BuildContext context, String message) {
+  void showError(BuildContext context, dynamic errorData) {
+    String message;
+    if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
+      message = errorData['message'];
+    } else if (errorData is String) {
+      message = errorData;
+    } else {
+      message = 'Bilinmeyen bir hata oluştu.';
+    }
     CustomSnackBar(context: context, message: "$message !").showSnackBar();
   }
 
   String extractMessage(dynamic errorData) {
-    if (errorData is Map<String, dynamic> && errorData.containsKey('err')) {
-      return errorData['err'];
+    if (errorData is Map<String, dynamic> && errorData.containsKey('message')) {
+      return errorData['message'];
+    } else if (errorData is String) {
+      return errorData;
     }
     return 'Bilinmeyen bir hata oluştu.';
   }

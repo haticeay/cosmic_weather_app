@@ -3,10 +3,11 @@ import 'package:cosmic_weather_app/core/service/nasa_service.dart';
 
 class NasaRepo {
   Future<List<NasaModel>> getNasaData() async {
+  
     try {
       final response = await NasaService<Map<String, dynamic>>().getMethod(
         url: "",
-        fromJson: (json) => json, // JSON nesnesi döndürülüyor
+        fromJson: (json) => json,
       );
 
       if (response == null) {
@@ -15,15 +16,26 @@ class NasaRepo {
 
       List<NasaModel> nasaDataList = [];
 
-      // API'nin `sol_keys` adlı anahtarında günlük hava durumu verileri var.
-      List<String> solKeys = List<String>.from(response["sol_keys"] ?? []);
+      response.forEach((sol, data) {
+        if (sol != 'sol_keys' && sol != 'validity_checks') {
+          var atmosphericTemperature = data['AT'];
+          var pressureData = data['PRE'];
+          var windData = data['HWS'];
 
-      for (var sol in solKeys) {
-        var dayData = response[sol]; // Günlük hava durumu verisi
-        if (dayData != null) {
-          nasaDataList.add(NasaModel.fromJson(dayData));
+          nasaDataList.add(
+            NasaModel(
+              minTemp: atmosphericTemperature?['mn'] as double?,
+              maxTemp: atmosphericTemperature?['mx'] as double?,
+              avgTemp: atmosphericTemperature?['av'] as double?,
+              pressure: pressureData?['av'] as double?,
+              horizontalWindSpeed: windData?['av'] as double?,
+              windDirectionCompassPoint: data['WD']['most_common']['compass_point'] as String?,
+              atmoOpacity: data['ATMO_OPACITY'] as String?,
+              sol: sol,
+            ),
+          );
         }
-      }
+      });
 
       return nasaDataList;
     } catch (error) {

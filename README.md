@@ -1,6 +1,13 @@
 # cosmic_weather_app
 
-A new Flutter project.
+Cosmic Weather App, hem Dünya'daki şehirlerin hem de Mars'taki (NASA API'si aracılığıyla) hava durumu bilgilerini kullanıcı dostu bir arayüzle sunan bir Flutter uygulamasıdır. Farklı gezegenlerin hava koşullarını keşfedin!
+
+## Ekran Görüntüleri
+
+![Uygulama Ana Ekranı](assets/screenshots/home_view.png)
+![Splah Ekranı](assets/screenshots/splas_view.png)
+!(assets/screenshots/city_list.png)
+
 
 ## Getting Started
 
