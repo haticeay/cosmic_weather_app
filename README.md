@@ -4,11 +4,13 @@ Cosmic Weather App, hem Dünya'daki şehirlerin hem de Mars'taki (NASA API'si ar
 
 ## Ekran Görüntüleri
 
-<p align="left">
-  <img src="assets/screenshots/home_view.png" width="300" alt="Uygulama Ana Ekranı">
-  <img src="assets/screenshots/splash_view.png" width="300" alt="Splash Ekranı">
-  <img src="assets/screenshots/city_list.png" width="300" alt="Şehir Listesi Ekranı">
-</p>
+<table width="100%">
+  <tr>
+    <td align="center"><img src="assets/screenshots/home_view.png" width="200" alt="Uygulama Ana Ekranı"></td>
+    <td align="center"><img src="assets/screenshots/splash_view.png" width="200" alt="Splash Ekranı"></td>
+    <td align="center"><img src="assets/screenshots/city_list.png" width="200" alt="Şehir Listesi Ekranı"></td>
+  </tr>
+</table>
 
 ## Getting Started
 
